@@ -1,0 +1,12 @@
+---
+import Base from '../layouts/Base.astro';
+import { getPageContent } from '../content';
+
+const page = getPageContent('agenda');
+---
+
+<Base title={page.meta.title} description={page.meta.description}>
+  <main>
+    <p class="p-12 text-center">Agenda — components coming soon</p>
+  </main>
+</Base>

@@ -1,0 +1,89 @@
+---
+import { getCommonContent } from '../content';
+
+const { header } = getCommonContent();
+---
+
+<header class="fixed inset-x-0 top-0 z-[2000] mt-[30px] px-4 max-md:mt-2 md:px-[30px]">
+  <div class="mx-auto max-w-[1280px]">
+    <nav
+      data-site-nav
+      class="relative flex items-center justify-between rounded-[30px] border-[4px] border-brand-primary bg-[rgba(255,250,221,0.89)] px-5 py-2 max-md:border-2 md:px-10 md:py-[10px]"
+      aria-label="Menu"
+    >
+      <a href="/" class="hidden w-[60px] shrink-0 md:block">
+        <img src="/images/FoodTuk-logo.webp" alt={header.logoAlt} class="w-full" loading="eager" decoding="async" />
+      </a>
+
+      <div
+        data-mobile-panel
+        class="pointer-events-none invisible fixed inset-0 z-40 flex items-center justify-center bg-white opacity-0 transition duration-300 md:pointer-events-auto md:visible md:static md:z-auto md:flex-1 md:bg-transparent md:opacity-100"
+      >
+        <div class="flex flex-col items-center gap-5 bg-brand-primary px-5 py-6 text-center text-2xl font-medium text-brand-light max-[478px]:w-full max-[478px]:gap-3 md:flex-row md:justify-center md:gap-20 md:bg-transparent md:px-0 md:py-0 md:text-base md:text-brand-primary lg:gap-20">
+          {header.nav.map((item) => (
+            <a
+              href={item.href}
+              class="transition-opacity duration-fast hover:opacity-80"
+              data-nav-link
+            >
+              {item.label}
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <a href="/" class="w-10 shrink-0 md:hidden">
+        <img src="/images/FoodTuk-logo.webp" alt={header.logoAlt} class="w-full" loading="eager" decoding="async" />
+      </a>
+
+      <button
+        type="button"
+        data-mobile-toggle
+        aria-expanded="false"
+        aria-label={header.menuOpen}
+        class="relative z-50 ml-auto inline-flex items-center justify-center text-brand-primary md:hidden"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="h-5 w-5">
+          <path fill="currentColor" d="M0 96C0 78.3 14.3 64 32 64l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 128C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32L32 448c-17.7 0-32-14.3-32-32s14.3-32 32-32l384 0c17.7 0 32 14.3 32 32z"></path>
+        </svg>
+      </button>
+
+      <div class="hidden w-[60px] shrink-0 md:block"></div>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const nav = document.querySelector('[data-site-nav]');
+  const button = nav?.querySelector('[data-mobile-toggle]');
+  const panel = nav?.querySelector('[data-mobile-panel]');
+  const links = nav?.querySelectorAll('[data-nav-link]') ?? [];
+
+  if (nav instanceof HTMLElement && button instanceof HTMLButtonElement && panel instanceof HTMLElement) {
+    const setOpen = (open: boolean) => {
+      panel.classList.toggle('pointer-events-none', !open);
+      panel.classList.toggle('invisible', !open);
+      panel.classList.toggle('opacity-0', !open);
+      panel.classList.toggle('pointer-events-auto', open);
+      panel.classList.toggle('visible', open);
+      panel.classList.toggle('opacity-100', open);
+      button.setAttribute('aria-expanded', String(open));
+      button.setAttribute('aria-label', open ? 'Sluit menu' : 'Open menu');
+      document.body.classList.toggle('overflow-hidden', open);
+    };
+
+    button.addEventListener('click', () => {
+      setOpen(button.getAttribute('aria-expanded') !== 'true');
+    });
+
+    links.forEach((link) => {
+      link.addEventListener('click', () => setOpen(false));
+    });
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768) {
+        setOpen(false);
+      }
+    });
+  }
+</script>

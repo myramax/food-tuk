@@ -1,0 +1,153 @@
+---
+import { getPageContent } from '../content';
+
+const { contact } = getPageContent('home');
+const accessKey = import.meta.env.PUBLIC_WEB3FORMS_ACCESS_KEY;
+---
+
+<form class="mx-auto flex w-full max-w-[840px] flex-wrap justify-between gap-y-4" data-foodtuk-form>
+  <input type="hidden" name="access_key" value={accessKey} />
+  <input type="hidden" name="subject" value="Offerte aanvraag van FoodTuk website" data-form-subject />
+  <input type="hidden" name="from_name" value="FoodTuk website" />
+  <input type="checkbox" name="botcheck" class="hidden" style="display:none" />
+
+  <div class="w-full sm:w-[49%]">
+    <input
+      name="Naam"
+      type="text"
+      required
+      aria-label={contact.form.name}
+      placeholder={contact.form.name}
+      class="w-full rounded-md border border-brand-primary bg-brand-panel px-[14px] py-[10px] text-[16px] font-medium leading-6 text-brand-subtle outline-none transition-colors duration-fast placeholder:text-brand-subtle focus:border-brand-dark/30"
+    />
+  </div>
+
+  <div class="w-full sm:w-[49%]">
+    <input
+      name="Telefoonnummer"
+      type="tel"
+      aria-label={contact.form.phone}
+      placeholder={contact.form.phone}
+      class="w-full rounded-md border border-brand-primary bg-brand-panel px-[14px] py-[10px] text-[16px] font-medium leading-6 text-brand-subtle outline-none transition-colors duration-fast placeholder:text-brand-subtle focus:border-brand-dark/30"
+    />
+  </div>
+
+  <div class="w-full">
+    <input
+      name="E-mail"
+      type="email"
+      required
+      aria-label={contact.form.email}
+      placeholder={contact.form.email}
+      class="w-full rounded-md border border-brand-primary bg-brand-panel px-[14px] py-[10px] text-[16px] font-medium leading-6 text-brand-subtle outline-none transition-colors duration-fast placeholder:text-brand-subtle focus:border-brand-dark/30"
+    />
+  </div>
+
+  <div class="w-full sm:w-[49%]">
+    <input
+      name="Aantal personen (schatting)"
+      type="text"
+      required
+      aria-label={contact.form.guests}
+      placeholder={contact.form.guests}
+      class="w-full rounded-md border border-brand-primary bg-brand-panel px-[14px] py-[10px] text-[16px] font-medium leading-6 text-brand-subtle outline-none transition-colors duration-fast placeholder:text-brand-subtle focus:border-brand-dark/30"
+    />
+  </div>
+
+  <div class="w-full sm:w-[49%]">
+    <input
+      name="Datum en locatie"
+      type="text"
+      required
+      aria-label={contact.form.dateLocation}
+      placeholder={contact.form.dateLocation}
+      class="w-full rounded-md border border-brand-primary bg-brand-panel px-[14px] py-[10px] text-[16px] font-medium leading-6 text-brand-subtle outline-none transition-colors duration-fast placeholder:text-brand-subtle focus:border-brand-dark/30"
+    />
+  </div>
+
+  <div class="w-full">
+    <textarea
+      name="Extra opmerking of info"
+      aria-label={contact.form.message}
+      placeholder={contact.form.message}
+      rows="6"
+      class="w-full rounded-md border border-brand-primary bg-brand-panel px-[14px] py-[10px] text-[16px] font-medium leading-6 text-brand-subtle outline-none transition-colors duration-fast placeholder:text-brand-subtle focus:border-brand-dark/30"
+    ></textarea>
+  </div>
+
+  <div class="w-full">
+    <button
+      type="submit"
+      class="inline-flex w-full items-center justify-center rounded-md bg-brand-button-soft px-4 py-4 text-base font-semibold leading-4 text-white transition-transform duration-fast hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70"
+      data-submit-button
+      data-submit-label={contact.form.submit}
+      data-loading-label={contact.form.loading}
+    >
+      {contact.form.submit}
+    </button>
+    <p class="mt-3 hidden text-sm text-brand-subtle" data-form-status aria-live="polite"></p>
+  </div>
+</form>
+
+<script is:inline define:vars={{ successMessage: contact.form.success, errorMessage: contact.form.error }}>
+  const form = document.querySelector('[data-foodtuk-form]');
+
+  if (form instanceof HTMLFormElement) {
+    const button = form.querySelector('[data-submit-button]');
+    const status = form.querySelector('[data-form-status]');
+    const subject = form.querySelector('[data-form-subject]');
+    const nameInput = form.querySelector('input[name="Naam"]');
+
+    if (
+      button instanceof HTMLButtonElement &&
+      status instanceof HTMLElement &&
+      subject instanceof HTMLInputElement &&
+      nameInput instanceof HTMLInputElement
+    ) {
+      const submitLabel = button.dataset.submitLabel ?? button.textContent ?? 'Versturen';
+      const loadingLabel = button.dataset.loadingLabel ?? 'Versturen...';
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const accessKey = form.querySelector('input[name="access_key"]');
+        if (!(accessKey instanceof HTMLInputElement) || !accessKey.value.trim()) {
+          status.textContent = errorMessage;
+          status.classList.remove('hidden');
+          return;
+        }
+
+        subject.value = `Offerte aanvraag van ${nameInput.value || 'FoodTuk website'}`;
+        status.classList.add('hidden');
+        button.disabled = true;
+        button.textContent = loadingLabel;
+
+        try {
+          const response = await fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            body: new FormData(form),
+            headers: {
+              Accept: 'application/json',
+            },
+          });
+
+          const result = await response.json();
+          if (!response.ok || !result.success) {
+            throw new Error(result.message || 'Request failed');
+          }
+
+          form.reset();
+          status.textContent = successMessage;
+          status.classList.remove('hidden');
+        } catch (error) {
+          console.error('[foodtuk-form] submission failed', error);
+          status.textContent = errorMessage;
+          status.classList.remove('hidden');
+        } finally {
+          button.disabled = false;
+          button.textContent = submitLabel;
+        }
+      });
+    }
+  }
+</script>

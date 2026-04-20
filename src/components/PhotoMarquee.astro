@@ -1,0 +1,30 @@
+---
+import { getPageContent } from '../content';
+
+const { slider } = getPageContent('home');
+---
+
+<section class="overflow-hidden pb-section">
+  <div class="foodtuk-marquee-track flex w-max gap-4">
+    {slider.images.map((image, index) => (
+      <img
+        src={image}
+        alt=""
+        class="h-[50vh] w-auto max-w-[300px] rounded-[16px] object-cover max-[478px]:max-w-[200px]"
+        loading={index < 4 ? 'eager' : 'lazy'}
+        decoding="async"
+      />
+    ))}
+
+    {slider.images.map((image) => (
+      <img
+        src={image}
+        alt=""
+        aria-hidden="true"
+        class="h-[50vh] w-auto max-w-[300px] rounded-[16px] object-cover max-[478px]:max-w-[200px]"
+        loading="lazy"
+        decoding="async"
+      />
+    ))}
+  </div>
+</section>

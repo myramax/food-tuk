@@ -1,0 +1,25 @@
+---
+/**
+ * Stack — structural micro-primitive.
+ *
+ * Vertical spacing between children using semantic gap tokens.
+ *
+ * Gap options:
+ *   'element' → gap-element (16px) — between text elements
+ *   'block'   → gap-block (40–64px fluid) — between content blocks
+ *   'section' → gap-section (80–128px fluid) — between major sections
+ */
+interface Props {
+  gap?: 'element' | 'block' | 'section';
+  as?: 'div' | 'ul' | 'ol';
+  class?: string;
+}
+
+const { gap = 'element', as: Tag = 'div', class: cls } = Astro.props as Props;
+const gapMap: Record<string, string> = { element: 'gap-element', block: 'gap-block', section: 'gap-section' };
+const gapClass = gapMap[gap];
+---
+
+<Tag class:list={['flex flex-col', gapClass, cls]}>
+  <slot />
+</Tag>

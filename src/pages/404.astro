@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import Stack from '../components/Stack.astro';
+---
+
+<Base title="404" description="Page not found / Pagina niet gevonden.">
+  <main class="bg-brand-light pt-16 lg:pt-24">
+    <Section bg="bg-brand-light" width="reading">
+      <div class="rounded-lg border border-brand-dark/10 bg-white p-10 text-center shadow-lg">
+        <Stack>
+          <span class="text-xs font-bold uppercase tracking-widest text-brand-primary">404</span>
+          <h1 class="font-display text-display font-bold text-brand-dark">Page not found</h1>
+          <p class="text-lg leading-relaxed text-text-muted">Pagina niet gevonden.</p>
+          <p class="text-lg leading-relaxed text-text-muted">
+            Check the URL or return home. Controleer de URL of ga terug naar home.
+          </p>
+          <a href="/" class="inline-flex self-center rounded-pill bg-brand-primary px-8 py-3.5 text-sm font-bold text-white transition-all duration-base hover:-translate-y-0.5 hover:shadow-md">
+            Home
+          </a>
+        </Stack>
+      </div>
+    </Section>
+  </main>
+</Base>

@@ -1,0 +1,39 @@
+---
+import { getPageContent } from '../content';
+import Section from './Section.astro';
+
+const { about } = getPageContent('home');
+---
+
+<Section
+  bg="bg-brand-accent border-y border-dotted border-brand-primary overflow-hidden"
+  class="scroll-mt-40"
+>
+  <div id="wat-wij-doen" class="flex flex-col items-center gap-10 xl:flex-row">
+    <div class="reveal max-w-[690px]">
+      <h2 class="font-display text-display font-semibold leading-[40px] text-brand-primary md:leading-[64px]">
+        {about.heading}
+      </h2>
+
+      <div class="mt-4 foodtuk-prose" set:html={about.bodyHtml}></div>
+
+      <div class="mt-6 flex flex-wrap gap-2">
+        {about.pills.map((pill) => (
+          <span class="rounded-[16px] border border-brand-primary bg-brand-soft px-[10px] py-2 text-[12px] font-normal leading-[12px] text-brand-primary">
+            {pill}
+          </span>
+        ))}
+      </div>
+    </div>
+
+    <div class="reveal w-full xl:flex-1">
+      <img
+        src={about.image}
+        alt={about.imageAlt}
+        class="w-full max-w-[903px] xl:-mr-[500px]"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  </div>
+</Section>

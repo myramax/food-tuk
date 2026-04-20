@@ -1,0 +1,35 @@
+---
+import { getPageContent } from '../content';
+import Section from './Section.astro';
+
+const { features } = getPageContent('home');
+---
+
+<Section bg="bg-brand-light">
+  <div class="mx-auto max-w-[760px] text-center">
+    <h2 class="reveal font-display text-display font-semibold leading-[40px] text-brand-primary md:leading-[64px]">
+      {features.heading}
+    </h2>
+    <p class="reveal mt-2">{features.subhead}</p>
+  </div>
+
+  <div class="mt-14 grid gap-4 md:grid-cols-3">
+    {features.cards.map((card) => (
+      <article class="reveal relative flex min-h-[400px] items-center justify-center overflow-hidden rounded-[16px] px-12 py-10 text-center md:min-h-[600px]">
+        <video class="absolute inset-0 h-full w-full object-cover" autoplay loop muted playsinline preload="auto">
+          <source src={card.video} type="video/mp4" />
+        </video>
+        <div class="absolute inset-0 bg-[rgba(70,38,1,0.67)]"></div>
+
+        <div class="relative">
+          <h3 class="font-display text-heading font-semibold leading-[32px] text-text md:leading-[40px]">
+            {card.title}
+          </h3>
+          <p class="mt-4 text-center text-[16px] leading-6 text-[#cdcdcd]">
+            {card.body}
+          </p>
+        </div>
+      </article>
+    ))}
+  </div>
+</Section>

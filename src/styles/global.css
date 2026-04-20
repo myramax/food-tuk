@@ -1,0 +1,138 @@
+@import "tailwindcss";
+@import "./design-system.css";
+
+@theme {
+  --color-brand-primary: #b0a354;
+  --color-brand-dark: #1a1a1a;
+  --color-brand-light: #faf6e0;
+  --color-brand-accent: #fff8d4;
+  --color-brand-soft: #ebe3ae;
+  --color-brand-subtle: #9e9977;
+  --color-brand-panel: #fffadd;
+  --color-brand-panel-open: #ece5bb;
+  --color-brand-button-soft: #ddcd6b;
+  --color-text: #e9e9e9;
+  --color-text-muted: #9e9977;
+
+  --font-display: 'El Messiri', serif;
+  --font-body: 'Satoshi', sans-serif;
+
+  --z-header: 50;
+  --z-overlay: 100;
+  --z-modal: 200;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('/fonts/Satoshi-Variable.ttf') format('truetype');
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: #faf6e0;
+}
+
+body {
+  min-height: 100vh;
+  background-color: #faf6e0;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #9e9977;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'El Messiri', serif;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  z-index: 3000;
+  transform: translateY(-200%);
+  border-radius: 0.625rem;
+  background-color: #fff;
+  padding: 0.75rem 1rem;
+  color: #1a1a1a;
+  transition: transform 150ms ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.typed-cursor {
+  color: inherit;
+}
+
+details > summary {
+  list-style: none;
+}
+
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.foodtuk-marquee-track {
+  animation: foodtuk-marquee 38s linear infinite;
+}
+
+.foodtuk-marquee-track:hover {
+  animation-play-state: paused;
+}
+
+.foodtuk-prose ul {
+  margin-top: 1rem;
+  padding-left: 1.25rem;
+}
+
+.foodtuk-prose li {
+  margin-top: 0.25rem;
+}
+
+.foodtuk-prose a {
+  text-decoration: underline;
+}
+
+@keyframes foodtuk-marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .foodtuk-marquee-track { animation: none; }
+}
+
+@media (max-width: 767px) {
+  body {
+    font-size: 16px;
+    line-height: 24px;
+  }
+}

@@ -1,0 +1,38 @@
+---
+import Base from '../layouts/Base.astro';
+import { getPageContent } from '../content';
+import { buildFaqSchema } from '../lib/schema';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import HeroSection from '../components/HeroSection.astro';
+import AboutSection from '../components/AboutSection.astro';
+import FeatureSection from '../components/FeatureSection.astro';
+import FaqSection from '../components/FaqSection.astro';
+import ReviewsSection from '../components/ReviewsSection.astro';
+import ContactSection from '../components/ContactSection.astro';
+import PhotoMarquee from '../components/PhotoMarquee.astro';
+
+const page = getPageContent('home');
+const faqSchema = buildFaqSchema(page.faq.items);
+---
+
+<Base title={page.meta.title} description={page.meta.description} ogImage={page.meta.ogImage}>
+  <Fragment slot="head">
+    <link rel="stylesheet" href="/vendor/food-tuk/trustindex-google-widget.css" />
+    <script is:inline type="application/ld+json" set:html={faqSchema}></script>
+  </Fragment>
+
+  <Header />
+
+  <main id="main-content">
+    <HeroSection />
+    <AboutSection />
+    <FeatureSection />
+    <FaqSection />
+    <ReviewsSection />
+    <ContactSection />
+    <PhotoMarquee />
+  </main>
+
+  <Footer />
+</Base>

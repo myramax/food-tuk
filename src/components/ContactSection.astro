@@ -1,0 +1,25 @@
+---
+import { getPageContent } from '../content';
+import Section from './Section.astro';
+import ContactForm from './ContactForm.astro';
+
+const { contact } = getPageContent('home');
+---
+
+<Section
+  bg="bg-brand-accent border-y border-dotted border-brand-primary scroll-mt-40"
+  class="scroll-mt-40"
+>
+  <div id="offerte-contact" class="flex flex-col items-center gap-12">
+    <div class="reveal max-w-[600px] text-center">
+      <h2 class="font-display text-display font-semibold leading-[40px] text-brand-primary md:leading-[64px]">
+        {contact.heading}
+      </h2>
+      <div class="mt-4 foodtuk-prose" set:html={contact.subtitleHtml}></div>
+    </div>
+
+    <div class="reveal w-full">
+      <ContactForm />
+    </div>
+  </div>
+</Section>

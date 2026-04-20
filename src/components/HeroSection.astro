@@ -1,0 +1,76 @@
+---
+import { getPageContent } from '../content';
+
+const { hero } = getPageContent('home');
+---
+
+<section class="px-4 pt-4">
+  <div class="mx-auto max-w-[1280px]">
+    <div class="relative flex min-h-[90vh] items-center justify-center overflow-hidden rounded-[16px] px-6 md:px-[60px]">
+      <video
+        class="absolute inset-0 h-full w-full object-cover"
+        autoplay
+        loop
+        muted
+        playsinline
+        preload="auto"
+      >
+        <source src={hero.video} type="video/mp4" />
+      </video>
+
+      <div class="absolute inset-0 bg-black/50"></div>
+
+      <div class="relative reveal flex max-w-[844px] flex-col items-center text-center">
+        <h1 class="font-display text-hero font-bold leading-[40px] text-text md:leading-[72px]">
+          <span>{hero.prefix}</span>
+          <span data-typed-root data-typed-strings={JSON.stringify(hero.typedStrings)} class="inline"></span>
+        </h1>
+
+        <p class="mt-4 text-center text-text md:max-w-[760px]">
+          {hero.subtitle}
+        </p>
+
+        <a
+          href={hero.ctaHref}
+          class="mt-5 inline-flex items-center justify-center rounded-md bg-brand-primary px-4 py-4 text-base font-semibold leading-4 text-white transition-transform duration-fast hover:-translate-y-0.5"
+        >
+          {hero.cta}
+        </a>
+
+        <div class="absolute top-[110%] flex flex-col items-center gap-2 text-center text-text md:top-[120%]">
+          <p>{hero.scrollHint}</p>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="h-[30px] w-[30px]">
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M112 184l144 144 144-144"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import Typed from 'typed.js';
+
+  const root = document.querySelector('[data-typed-root]');
+
+  if (root instanceof HTMLElement) {
+    const rawStrings = root.dataset.typedStrings;
+
+    if (rawStrings) {
+      try {
+        const strings = JSON.parse(rawStrings) as string[];
+
+        new Typed(root, {
+          strings,
+          typeSpeed: 50,
+          backSpeed: 50,
+          backDelay: 300,
+          cursorChar: '|',
+          loop: true,
+        });
+      } catch {
+        // Keep the static prefix visible if parsing fails.
+      }
+    }
+  }
+</script>

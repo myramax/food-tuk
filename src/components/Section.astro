@@ -1,0 +1,30 @@
+---
+/**
+ * Section — structural micro-primitive.
+ *
+ * Enforces consistent section padding, container width, and gutters.
+ * Use for every content section below the hero.
+ *
+ * Width options:
+ *   'page'    → max-w-7xl (1280px) — default, full sections
+ *   'content' → max-w-5xl (1024px) — text + media side by side
+ *   'reading' → max-w-3xl (768px)  — pure text, blog prose
+ *
+ * The hero/intro section of each page typically needs custom padding
+ * for header clearance. Use manual markup for those, not this component.
+ */
+interface Props {
+  bg?: string;
+  width?: 'page' | 'content' | 'reading';
+  class?: string;
+}
+
+const { bg = 'bg-white', width = 'page', class: cls } = Astro.props;
+const maxW = { page: 'max-w-7xl', content: 'max-w-5xl', reading: 'max-w-3xl' }[width];
+---
+
+<section class:list={['py-section', bg, cls]}>
+  <div class:list={['mx-auto px-6 lg:px-12', maxW]}>
+    <slot />
+  </div>
+</section>

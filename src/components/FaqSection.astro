@@ -1,0 +1,38 @@
+---
+import { getPageContent } from '../content';
+import Section from './Section.astro';
+
+const { faq } = getPageContent('home');
+---
+
+<Section
+  bg="bg-brand-accent border-y border-dotted border-brand-primary scroll-mt-40"
+  class="scroll-mt-40"
+>
+  <div id="faq" class="flex flex-col justify-between gap-10 lg:flex-row lg:gap-20">
+    <div class="reveal max-w-[500px]">
+      <h2 class="font-display text-display font-semibold leading-[40px] text-brand-primary md:leading-[64px]">
+        {faq.heading}
+      </h2>
+      <div class="mt-4 foodtuk-prose" set:html={faq.subtitleHtml}></div>
+    </div>
+
+    <div class="reveal w-full max-w-[700px]">
+      <div class="space-y-4">
+        {faq.items.map((item) => (
+          <details class="group rounded-[16px] bg-brand-panel open:bg-brand-panel-open">
+            <summary class="flex cursor-pointer items-center gap-3 px-4 py-[15px]">
+              <h3 class="flex-1 font-display text-[20px] font-bold leading-[30px] text-brand-primary">
+                {item.question}
+              </h3>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="h-4 w-4 text-brand-primary transition-transform duration-fast group-open:rotate-90">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M184 112l144 144-144 144"></path>
+              </svg>
+            </summary>
+            <div class="foodtuk-prose px-4 pb-[15px] text-[16px] leading-6 text-brand-subtle" set:html={item.answerHtml}></div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </div>
+</Section>

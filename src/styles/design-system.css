@@ -1,0 +1,57 @@
+/*
+ * Design System — web-template-v2
+ *
+ * Structural fundamentals that do NOT change per project.
+ * Colors, fonts, and brand identity live in global.css.
+ *
+ * Tokens defined here become Tailwind utilities automatically:
+ *   --spacing-section  → py-section, gap-section, etc.
+ *   --font-size-hero   → text-hero
+ *   --shadow-md        → shadow-md
+ *   --radius-lg        → rounded-lg
+ *   --duration-base    → duration-base
+ */
+
+@theme {
+  /* ----------------------------------------------------------------
+   * Spacing — semantic structural tokens
+   * Use these for page rhythm. Use Tailwind defaults for detail spacing.
+   * ---------------------------------------------------------------- */
+  --spacing-section:   clamp(5rem, 8vw, 9rem);   /* 80–144px — vertical section padding */
+  --spacing-block:     clamp(2.5rem, 4vw, 3.5rem); /* 40–56px — between content blocks */
+  --spacing-component: 2rem;                      /* 32px     — card/panel padding */
+  --spacing-element:   1rem;                      /* 16px     — between text elements */
+
+  /* ----------------------------------------------------------------
+   * Typography — fluid heading scale
+   * Body sizes use Tailwind defaults: text-xs, text-sm, text-base, text-lg
+   * ---------------------------------------------------------------- */
+  --font-size-hero:    clamp(2rem, 1.35rem + 2.8vw, 3.5rem);    /* 32–56px */
+  --font-size-display: clamp(2rem, 1.6rem + 1.5vw, 3rem);       /* 32–48px */
+  --font-size-heading: clamp(1.5rem, 1.3rem + 1.2vw, 2rem);     /* 24–32px */
+  --font-size-subhead: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem); /* 20–24px */
+
+  /* ----------------------------------------------------------------
+   * Shadows — 3 levels, neutral tint
+   * sm = resting state, md = cards, lg = hover/elevated
+   * ---------------------------------------------------------------- */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.08);
+
+  /* ----------------------------------------------------------------
+   * Border radius — 3 levels + pill
+   * These override Tailwind defaults intentionally.
+   * ---------------------------------------------------------------- */
+  --radius-md:   0.625rem; /* 10px — inputs, default buttons */
+  --radius-lg:   1rem;     /* 16px — large cards, hero elements */
+  --radius-pill: 99px;   /* buttons, badges, pills */
+
+  /* ----------------------------------------------------------------
+   * Transitions — 3 speeds
+   * Use with Tailwind: duration-fast, duration-base, duration-slow
+   * ---------------------------------------------------------------- */
+  --duration-fast: 150ms;
+  --duration-base: 300ms;
+  --duration-slow: 500ms;
+}
