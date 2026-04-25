@@ -5,6 +5,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import AgendaHeroSection from '../components/AgendaHeroSection.astro';
 import AgendaEventsSection from '../components/AgendaEventsSection.astro';
+import PhotoMarquee from '../components/PhotoMarquee.astro';
 
 const page = getPageContent('agenda');
 ---
@@ -15,6 +16,7 @@ const page = getPageContent('agenda');
   <main id="main-content">
     <AgendaHeroSection />
     <AgendaEventsSection />
+    <PhotoMarquee />
   </main>
 
   <Footer />

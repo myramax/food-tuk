@@ -7,17 +7,28 @@ const { heading, subhead } = getPageContent('agenda');
 <section class="px-4 pt-4">
   <div class="mx-auto w-full">
     <div class="relative flex min-h-[38vh] items-center justify-center overflow-hidden rounded-[16px] bg-brand-dark px-6 md:px-[60px]">
-      <div class="absolute inset-0 bg-[radial-gradient(ellipse_70%_80%_at_50%_110%,rgba(176,163,84,0.15),transparent)]"></div>
+      <video
+        class="absolute inset-0 h-full w-full object-cover opacity-40"
+        autoplay
+        loop
+        muted
+        playsinline
+        preload="auto"
+      >
+        <source src="/videos/foodtruck-backgroundvideo-compressed.mp4" type="video/mp4" />
+      </video>
+
+      <div class="absolute inset-0 bg-black/40"></div>
 
       <div class="relative reveal flex flex-col items-center text-center">
         <p class="mb-3 font-body text-xs font-semibold uppercase tracking-[0.22em] text-brand-primary">
-          Waar vind je ons
+          Festivals · Markten · Privé events
         </p>
         <h1 class="font-display text-display font-bold leading-tight text-text">
           {heading}
         </h1>
         <div class="mt-5 h-[2px] w-10 rounded-full bg-brand-primary opacity-60"></div>
-        <p class="mt-5 max-w-[480px] text-brand-subtle">
+        <p class="mt-5 max-w-[520px] text-brand-subtle">
           {subhead}
         </p>
       </div>
