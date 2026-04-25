@@ -9,6 +9,11 @@ export default defineConfig({
   site: 'https://food-tuk.nl',
   vite: {
     plugins: [tailwindPlugin],
+    server: {
+      watch: {
+        ignored: ['**/.worktrees/**'],
+      },
+    },
   },
   integrations: [
     sitemap(),

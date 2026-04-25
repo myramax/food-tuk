@@ -6,7 +6,7 @@
  *
  * Tokens defined here become Tailwind utilities automatically:
  *   --spacing-section  → py-section, gap-section, etc.
- *   --font-size-hero   → text-hero
+ *   --text-hero        → text-hero
  *   --shadow-md        → shadow-md
  *   --radius-lg        → rounded-lg
  *   --duration-base    → duration-base
@@ -26,10 +26,10 @@
    * Typography — fluid heading scale
    * Body sizes use Tailwind defaults: text-xs, text-sm, text-base, text-lg
    * ---------------------------------------------------------------- */
-  --font-size-hero:    clamp(2rem, 1.35rem + 2.8vw, 3.5rem);    /* 32–56px */
-  --font-size-display: clamp(2rem, 1.6rem + 1.5vw, 3rem);       /* 32–48px */
-  --font-size-heading: clamp(1.5rem, 1.3rem + 1.2vw, 2rem);     /* 24–32px */
-  --font-size-subhead: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem); /* 20–24px */
+  --text-hero:    clamp(2rem, 1.35rem + 2.8vw, 3.5rem);    /* 32–56px */
+  --text-display: clamp(2rem, 1.6rem + 1.5vw, 3rem);       /* 32–48px */
+  --text-heading: clamp(1.5rem, 1.3rem + 1.2vw, 2rem);     /* 24–32px */
+  --text-subhead: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem); /* 20–24px */
 
   /* ----------------------------------------------------------------
    * Shadows — 3 levels, neutral tint
