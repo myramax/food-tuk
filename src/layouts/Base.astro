@@ -5,10 +5,19 @@ interface Props {
   title: string;
   description: string;
   ogImage?: string;
+  ogImageAlt?: string;
   ogType?: 'website' | 'article';
+  robots?: string;
 }
 
-const { title, description, ogImage = '/images/foto4.webp', ogType = 'website' } = Astro.props;
+const {
+  title,
+  description,
+  ogImage = '/images/foto4.webp',
+  ogImageAlt = 'FoodTuk Skewers foodtruck met Indonesische saté',
+  ogType = 'website',
+  robots = 'index, follow',
+} = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
@@ -19,12 +28,17 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title}</title>
   <meta name="description" content={description} />
+  <meta name="robots" content={robots} />
+  <meta name="theme-color" content="#fff8d4" />
+  <meta name="color-scheme" content="light" />
   <link rel="canonical" href={canonicalURL.href} />
 
   <meta property="og:type" content={ogType} />
+  <meta property="og:site_name" content="FoodTuk Skewers" />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:image" content={new URL(ogImage, Astro.site).href} />
+  <meta property="og:image:alt" content={ogImageAlt} />
   <meta property="og:url" content={canonicalURL.href} />
   <meta property="og:locale" content="nl_NL" />
 
@@ -32,6 +46,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={new URL(ogImage, Astro.site).href} />
+  <meta name="twitter:image:alt" content={ogImageAlt} />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />

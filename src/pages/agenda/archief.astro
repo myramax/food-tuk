@@ -10,7 +10,7 @@ import PhotoMarquee from '../../components/PhotoMarquee.astro';
 const page = getPageContent('agenda');
 ---
 
-<Base title={page.archiveMeta.title} description={page.archiveMeta.description}>
+<Base title={page.archiveMeta.title} description={page.archiveMeta.description} robots="noindex, follow">
   <Header />
 
   <main id="main-content">

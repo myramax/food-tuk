@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
-import { getPageContent } from '../content';
-import { buildFaqSchema } from '../lib/schema';
+import { getCommonContent, getPageContent } from '../content';
+import { buildHomeSchema } from '../lib/schema';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import HeroSection from '../components/HeroSection.astro';
@@ -13,13 +13,23 @@ import ContactSection from '../components/ContactSection.astro';
 import PhotoMarquee from '../components/PhotoMarquee.astro';
 
 const page = getPageContent('home');
-const faqSchema = buildFaqSchema(page.faq.items);
+const common = getCommonContent();
+const homeSchema = buildHomeSchema({
+  siteUrl: Astro.site?.href ?? 'https://food-tuk.nl',
+  siteName: common.siteName,
+  description: page.meta.description,
+  email: common.email,
+  phoneHref: common.phoneHref,
+  sameAs: common.footer.socials.map((item) => item.url),
+  logo: '/images/FoodTuk-logo.webp',
+  image: page.meta.ogImage,
+}, page.faq.items);
 ---
 
 <Base title={page.meta.title} description={page.meta.description} ogImage={page.meta.ogImage}>
   <Fragment slot="head">
     <link rel="stylesheet" href="/vendor/food-tuk/trustindex-google-widget.css" />
-    <script is:inline type="application/ld+json" set:html={faqSchema}></script>
+    <script is:inline type="application/ld+json" set:html={homeSchema}></script>
   </Fragment>
 
   <Header />

@@ -29,7 +29,15 @@ Cloudflare Pages
 | Variable | Description |
 |----------|-------------|
 | `PUBLIC_WEB3FORMS_ACCESS_KEY` | Web3Forms access key for contact form |
+| `DIRECTUS_URL` | Directus CMS URL for agenda events. Falls back to local content when unset. |
+| `DIRECTUS_TOKEN` | Static API Reader token for the Directus `events` collection. |
+| `CLOUDFLARE_DEPLOY_HOOK` | GitHub Actions secret, not runtime env. Triggers scheduled Cloudflare Pages rebuilds. |
 
 ## CMS (Agenda)
 
 Events managed via Directus. Deploy hook triggers rebuild on publish.
+See:
+
+- `docs/launch/directus-agenda.md`
+- `docs/launch/cloudflare-pages.md`
+- `docs/launch/customer-domain-cms.md`

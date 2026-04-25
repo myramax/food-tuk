@@ -1,13 +1,15 @@
 ---
 import { getPageContent } from '../content';
 import { getArchivedAgendaEvents, getUpcomingAgendaEvents, groupAgendaEventsByMonth } from '../lib/agenda';
+import { getAgendaEvents } from '../lib/agenda-source';
 import AgendaEventGroups from './AgendaEventGroups.astro';
 import Section from './Section.astro';
 
 const page = getPageContent('agenda');
 const PAGE_SIZE = 5;
-const eventsWithIdx = getUpcomingAgendaEvents(page.events);
-const archivedEvents = getArchivedAgendaEvents(page.events);
+const agendaEvents = await getAgendaEvents();
+const eventsWithIdx = getUpcomingAgendaEvents(agendaEvents);
+const archivedEvents = getArchivedAgendaEvents(agendaEvents);
 const hasEvents = eventsWithIdx.length > 0;
 const hasArchive = archivedEvents.length > 0;
 const groups = groupAgendaEventsByMonth(eventsWithIdx);

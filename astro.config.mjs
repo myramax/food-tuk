@@ -16,6 +16,8 @@ export default defineConfig({
     },
   },
   integrations: [
-    sitemap(),
+    sitemap({
+      filter: (page) => !page.endsWith('/agenda/archief/'),
+    }),
   ],
 });

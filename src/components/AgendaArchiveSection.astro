@@ -1,11 +1,12 @@
 ---
 import { getPageContent } from '../content';
 import { getArchivedAgendaEvents, groupAgendaEventsByMonth } from '../lib/agenda';
+import { getAgendaEvents } from '../lib/agenda-source';
 import AgendaEventGroups from './AgendaEventGroups.astro';
 import Section from './Section.astro';
 
 const page = getPageContent('agenda');
-const events = getArchivedAgendaEvents(page.events);
+const events = getArchivedAgendaEvents(await getAgendaEvents());
 const groups = groupAgendaEventsByMonth(events);
 const hasEvents = events.length > 0;
 ---
