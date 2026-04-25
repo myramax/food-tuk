@@ -8,13 +8,13 @@ const hasEvents = page.events.length > 0;
 
 <Section bg="bg-brand-light" width="content">
   {hasEvents ? (
-    <ul class="space-y-3" role="list">
+    <ul class="divide-y divide-brand-soft border-y border-brand-soft" role="list">
       {page.events.map((event, i) => (
         <li
-          class="reveal group flex items-stretch overflow-hidden rounded-lg border border-brand-soft border-l-[3px] border-l-brand-primary bg-brand-panel transition-shadow duration-base hover:shadow-md"
+          class="reveal border-l-[3px] border-l-brand-primary pl-5 transition-colors duration-fast hover:bg-brand-accent"
           style={`transition-delay:${i * 70}ms`}
         >
-          <div class="flex flex-1 flex-col gap-1.5 px-6 py-5 md:flex-row md:items-center md:gap-0 md:px-8 md:py-6">
+          <div class="flex flex-col gap-1.5 py-5 pr-4 md:flex-row md:items-center md:gap-0 md:py-6 md:pr-6">
             <!-- Datum + naam als eenheid -->
             <div class="flex-1">
               <p class="font-body text-xs font-semibold uppercase tracking-[0.16em] text-brand-primary">
