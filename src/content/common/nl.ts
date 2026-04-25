@@ -5,11 +5,11 @@ export const common = {
   email: 'info@food-tuk.nl',
   header: {
     nav: [
-      { label: 'Wat wij doen', href: '/#wat-wij-doen' },
-      { label: 'Agenda', href: '/agenda' },
-      { label: 'FAQ', href: '/#faq' },
-      { label: 'Reviews', href: '/#reviews' },
-      { label: 'Offerte & contact', href: '/#offerte-contact' },
+      { label: 'Wat wij doen', href: '/#wat-wij-doen', button: false },
+      { label: 'Agenda', href: '/agenda', button: false },
+      { label: 'FAQ', href: '/#faq', button: false },
+      { label: 'Reviews', href: '/#reviews', button: false },
+      { label: 'Offerte & contact', href: '/#offerte-contact', button: true },
     ],
     menuOpen: 'Open menu',
     menuClose: 'Sluit menu',
