@@ -18,10 +18,10 @@ const { faq } = getPageContent('home');
     </div>
 
     <div class="reveal w-full max-w-[700px]">
-      <div class="space-y-4">
+      <div class="space-y-4" data-faq-list>
         {faq.items.map((item) => (
-          <details class="group rounded-[16px] bg-brand-panel open:bg-brand-panel-open">
-            <summary class="flex cursor-pointer items-center gap-3 px-4 py-[15px]">
+          <details class="group rounded-[16px] bg-brand-panel open:bg-brand-panel-open" data-faq-item>
+            <summary class="flex cursor-pointer items-center gap-3 px-4 py-[15px]" data-faq-summary>
               <h3 class="flex-1 font-display text-[20px] font-bold leading-[30px] text-brand-primary">
                 {item.question}
               </h3>
@@ -36,3 +36,56 @@ const { faq } = getPageContent('home');
     </div>
   </div>
 </Section>
+
+<script>
+  const faqList = document.querySelector('[data-faq-list]');
+  const hoverQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
+
+  if (faqList instanceof HTMLElement) {
+    const items = Array.from(faqList.querySelectorAll('[data-faq-item]')).filter(
+      (item): item is HTMLDetailsElement => item instanceof HTMLDetailsElement,
+    );
+
+    const closeOthers = (current: HTMLDetailsElement) => {
+      items.forEach((item) => {
+        if (item !== current) item.open = false;
+      });
+    };
+
+    items.forEach((item) => {
+      const summary = item.querySelector('[data-faq-summary]');
+
+      item.addEventListener('mouseenter', () => {
+        if (!hoverQuery.matches) return;
+        closeOthers(item);
+        item.open = true;
+      });
+
+      item.addEventListener('mouseleave', () => {
+        if (!hoverQuery.matches) return;
+        item.open = false;
+      });
+
+      item.addEventListener('toggle', () => {
+        if (!hoverQuery.matches && item.open) closeOthers(item);
+      });
+
+      summary?.addEventListener('click', (event) => {
+        if (hoverQuery.matches) event.preventDefault();
+      });
+
+      item.addEventListener('focusin', () => {
+        if (!hoverQuery.matches) return;
+        closeOthers(item);
+        item.open = true;
+      });
+
+      item.addEventListener('focusout', (event) => {
+        if (!hoverQuery.matches) return;
+        const nextTarget = event.relatedTarget;
+        if (nextTarget instanceof Node && item.contains(nextTarget)) return;
+        item.open = false;
+      });
+    });
+  }
+</script>

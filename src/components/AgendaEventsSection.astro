@@ -1,113 +1,30 @@
 ---
 import { getPageContent } from '../content';
+import { getArchivedAgendaEvents, getUpcomingAgendaEvents, groupAgendaEventsByMonth } from '../lib/agenda';
+import AgendaEventGroups from './AgendaEventGroups.astro';
 import Section from './Section.astro';
 
 const page = getPageContent('agenda');
-const hasEvents = page.events.length > 0;
 const PAGE_SIZE = 5;
-
-const maandNamen: Record<string, string> = {
-  jan: 'Januari', feb: 'Februari', mrt: 'Maart', apr: 'April',
-  mei: 'Mei',     jun: 'Juni',     jul: 'Juli',  aug: 'Augustus',
-  sep: 'September', okt: 'Oktober', nov: 'November', dec: 'December',
-};
-
-const eventsWithIdx = page.events.map((e, i) => ({ ...e, idx: i }));
-type EventRow = (typeof eventsWithIdx)[number];
-type Group = { key: string; label: string; startIdx: number; endIdx: number; events: EventRow[] };
-
-const groups = eventsWithIdx.reduce<Group[]>((acc, event) => {
-  const year = event.dateIso.slice(0, 4);
-  const key = `${year}-${event.month}`;
-  const label = `${maandNamen[event.month] ?? event.month} ${year}`;
-  const last = acc.at(-1);
-  if (last?.key === key) {
-    last.events.push(event);
-    last.endIdx = event.idx;
-  } else {
-    acc.push({ key, label, startIdx: event.idx, endIdx: event.idx, events: [event] });
-  }
-  return acc;
-}, []);
-
-const totalPages = Math.ceil(page.events.length / PAGE_SIZE);
+const eventsWithIdx = getUpcomingAgendaEvents(page.events);
+const archivedEvents = getArchivedAgendaEvents(page.events);
+const hasEvents = eventsWithIdx.length > 0;
+const hasArchive = archivedEvents.length > 0;
+const groups = groupAgendaEventsByMonth(eventsWithIdx);
+const totalPages = Math.ceil(eventsWithIdx.length / PAGE_SIZE);
 const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 ---
 
 <Section bg="bg-brand-light" width="content">
   {hasEvents ? (
-    <div data-agenda-root>
-      <div data-events-container>
-        {groups.map((group) => (
-          <div
-            data-month-group
-            data-start={group.startIdx}
-            data-end={group.endIdx}
-          >
-            <!-- Maandkop: label + lijn rechts, geen lijn boven -->
-            <div class="flex items-center gap-4 pb-3 pt-8 first:pt-0">
-              <span class="shrink-0 font-display text-subhead font-semibold text-brand-primary">
-                {group.label}
-              </span>
-              <div class="flex-1 border-t border-brand-soft"></div>
-            </div>
+    <div data-agenda-root data-page-size={PAGE_SIZE} data-total-pages={totalPages}>
+      <AgendaEventGroups groups={groups} paginated />
 
-            {group.events.map((event) => (
-              <div
-                data-event-idx={event.idx}
-                class="border-b border-brand-soft border-l-[3px] border-l-brand-primary pl-5 transition-colors duration-fast hover:bg-brand-accent"
-              >
-                <div class="flex flex-col gap-1.5 py-5 pr-4 md:flex-row md:items-center md:gap-0 md:py-6 md:pr-6">
-                  <div class="flex-1">
-                    <p class="font-body text-xs font-semibold uppercase tracking-[0.16em] text-brand-primary">
-                      {event.dayName} · {event.day} {event.month}
-                    </p>
-                    <h2 class="mt-1 font-display text-heading font-bold leading-snug text-brand-primary">
-                      {event.name}
-                    </h2>
-                    <div class="mt-2 flex flex-wrap gap-x-4 gap-y-0.5">
-                      <span class="flex items-center gap-1.5 text-sm text-brand-subtle">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" class="h-3 w-3 shrink-0" aria-hidden="true">
-                          <path fill="currentColor" d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/>
-                        </svg>
-                        {event.location}
-                      </span>
-                      <span class="flex items-center gap-1.5 text-sm text-brand-subtle">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="h-3 w-3 shrink-0" aria-hidden="true">
-                          <path fill="currentColor" d="M256 0a256 256 0 1 1 0 512A256 256 0 1 1 256 0zM232 120l0 136c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.5 33.3-6.5s4.5-25.9-6.5-33.3L280 243.2 280 120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"/>
-                        </svg>
-                        {event.time}
-                      </span>
-                    </div>
-                  </div>
-
-                  {event.url && (
-                    <a
-                      href={event.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="mt-4 inline-flex shrink-0 items-center gap-1.5 self-start text-sm font-semibold text-brand-primary transition-opacity duration-fast hover:opacity-70 md:mt-0 md:self-center md:pl-8"
-                    >
-                      {event.urlLabel}
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" class="h-3 w-3" aria-hidden="true">
-                        <path fill="currentColor" d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/>
-                      </svg>
-                    </a>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
-
-      <!-- Paginering als pills -->
       {totalPages > 1 && (
         <div data-pagination class="mt-10 flex items-center justify-center gap-2">
-          <!-- Vorige -->
           <button
             data-prev
-            class="flex h-9 w-9 items-center justify-center rounded-full border border-brand-soft text-brand-primary transition-colors duration-fast hover:border-brand-primary disabled:pointer-events-none disabled:opacity-30"
+            class="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-brand-soft text-brand-primary transition-colors duration-fast hover:border-brand-primary disabled:pointer-events-none disabled:cursor-default disabled:opacity-30"
             aria-label="Vorige pagina"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" class="h-3 w-3" aria-hidden="true">
@@ -115,21 +32,19 @@ const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
             </svg>
           </button>
 
-          <!-- Paginanummers -->
           {pageNumbers.map((n) => (
             <button
               data-page={n}
-              class="flex h-9 min-w-[2.25rem] items-center justify-center rounded-full border px-3 text-sm font-semibold transition-colors duration-fast"
+              class="flex h-9 min-w-[2.25rem] cursor-pointer items-center justify-center rounded-full border px-3 text-sm font-semibold transition-colors duration-fast"
               aria-label={`Pagina ${n}`}
             >
               {n}
             </button>
           ))}
 
-          <!-- Volgende -->
           <button
             data-next
-            class="flex h-9 w-9 items-center justify-center rounded-full border border-brand-soft text-brand-primary transition-colors duration-fast hover:border-brand-primary disabled:pointer-events-none disabled:opacity-30"
+            class="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-brand-soft text-brand-primary transition-colors duration-fast hover:border-brand-primary disabled:pointer-events-none disabled:cursor-default disabled:opacity-30"
             aria-label="Volgende pagina"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" class="h-3 w-3" aria-hidden="true">
@@ -138,12 +53,26 @@ const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
           </button>
         </div>
       )}
+
+      {hasArchive && (
+        <div class="mt-8 flex justify-center">
+          <a
+            href="/agenda/archief"
+            class="inline-flex items-center gap-2 text-sm font-semibold text-brand-primary transition-opacity duration-fast hover:opacity-70"
+          >
+            Bekijk eerdere events
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" class="h-3 w-3" aria-hidden="true">
+              <path fill="currentColor" d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/>
+            </svg>
+          </a>
+        </div>
+      )}
     </div>
   ) : (
     <div class="reveal flex flex-col items-center py-20 text-center">
       <p class="max-w-sm text-brand-subtle">{page.emptyState}</p>
       <a
-        href="/#offerte-contact"
+        href={page.emptyCtaHref}
         class="mt-6 inline-flex items-center justify-center rounded-md bg-brand-primary px-6 py-4 text-base font-semibold leading-4 text-white transition-transform duration-fast hover:-translate-y-0.5"
       >
         {page.emptyCtaLabel}
@@ -152,7 +81,6 @@ const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
   )}
 </Section>
 
-<!-- CTA: zelfde kleur als ContactSection op homepage -->
 <Section bg="bg-brand-accent border-y border-dotted border-brand-primary" width="content">
   <div class="reveal flex flex-col items-center text-center">
     <h2 class="font-display text-display font-semibold leading-tight text-brand-primary md:leading-[64px]">
@@ -168,55 +96,78 @@ const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
   </div>
 </Section>
 
-<script define:vars={{ PAGE_SIZE, totalPages }}>
-  const root = document.querySelector('[data-agenda-root]');
-  if (!root) throw new Error('agenda root not found');
+{hasEvents && totalPages > 1 && (
+  <script>
+    const root = document.querySelector('[data-agenda-root]');
 
-  const prevBtn = root.querySelector('[data-prev]');
-  const nextBtn = root.querySelector('[data-next]');
-  const pageBtns = root.querySelectorAll('[data-page]');
-  let currentPage = 1;
+    if (root instanceof HTMLElement) {
+      const pageSize = Number(root.dataset.pageSize ?? 5);
+      const totalPages = Number(root.dataset.totalPages ?? 1);
+      const prevBtn = root.querySelector('[data-prev]');
+      const nextBtn = root.querySelector('[data-next]');
+      const pageBtns = root.querySelectorAll('[data-page]');
+      let currentPage = 1;
 
-  function setPageBtnStyle(btn, active) {
-    if (active) {
-      btn.classList.add('bg-brand-primary', 'text-brand-dark', 'border-brand-primary');
-      btn.classList.remove('border-brand-soft', 'text-brand-subtle', 'hover:border-brand-primary');
-    } else {
-      btn.classList.remove('bg-brand-primary', 'text-brand-dark', 'border-brand-primary');
-      btn.classList.add('border-brand-soft', 'text-brand-subtle', 'hover:border-brand-primary');
+      const setPageBtnStyle = (btn: HTMLElement, active: boolean) => {
+        if (active) {
+          btn.classList.add('bg-brand-primary', 'text-brand-dark', 'border-brand-primary');
+          btn.classList.remove('border-brand-soft', 'text-brand-subtle', 'hover:border-brand-primary');
+        } else {
+          btn.classList.remove('bg-brand-primary', 'text-brand-dark', 'border-brand-primary');
+          btn.classList.add('border-brand-soft', 'text-brand-subtle', 'hover:border-brand-primary');
+        }
+      };
+
+      const showPage = (page: number) => {
+        const start = (page - 1) * pageSize;
+        const end = start + pageSize - 1;
+
+        root.querySelectorAll('[data-event-idx]').forEach((el) => {
+          if (!(el instanceof HTMLElement)) return;
+          const idx = Number(el.dataset.eventIdx);
+          el.style.display = idx >= start && idx <= end ? '' : 'none';
+        });
+
+        root.querySelectorAll('[data-month-group]').forEach((el) => {
+          if (!(el instanceof HTMLElement)) return;
+          const groupStart = Number(el.dataset.start);
+          const groupEnd = Number(el.dataset.end);
+          el.style.display = groupEnd >= start && groupStart <= end ? '' : 'none';
+        });
+
+        pageBtns.forEach((btn) => {
+          if (!(btn instanceof HTMLElement)) return;
+          setPageBtnStyle(btn, Number(btn.dataset.page) === page);
+        });
+
+        if (prevBtn instanceof HTMLButtonElement) prevBtn.disabled = page <= 1;
+        if (nextBtn instanceof HTMLButtonElement) nextBtn.disabled = page >= totalPages;
+
+        currentPage = page;
+      };
+
+      pageBtns.forEach((btn) => {
+        if (!(btn instanceof HTMLElement)) return;
+        setPageBtnStyle(btn, false);
+      });
+      showPage(1);
+
+      if (prevBtn instanceof HTMLButtonElement) {
+        prevBtn.addEventListener('click', () => {
+          if (currentPage > 1) showPage(currentPage - 1);
+        });
+      }
+
+      if (nextBtn instanceof HTMLButtonElement) {
+        nextBtn.addEventListener('click', () => {
+          if (currentPage < totalPages) showPage(currentPage + 1);
+        });
+      }
+
+      pageBtns.forEach((btn) => {
+        if (!(btn instanceof HTMLElement)) return;
+        btn.addEventListener('click', () => showPage(Number(btn.dataset.page)));
+      });
     }
-  }
-
-  function showPage(page) {
-    const start = (page - 1) * PAGE_SIZE;
-    const end = start + PAGE_SIZE - 1;
-
-    root.querySelectorAll('[data-event-idx]').forEach((el) => {
-      const idx = parseInt(el.dataset.eventIdx);
-      el.style.display = idx >= start && idx <= end ? '' : 'none';
-    });
-
-    root.querySelectorAll('[data-month-group]').forEach((el) => {
-      const gs = parseInt(el.dataset.start);
-      const ge = parseInt(el.dataset.end);
-      el.style.display = ge >= start && gs <= end ? '' : 'none';
-    });
-
-    pageBtns.forEach((btn) => setPageBtnStyle(btn, parseInt(btn.dataset.page) === page));
-
-    if (prevBtn) prevBtn.disabled = page <= 1;
-    if (nextBtn) nextBtn.disabled = page >= totalPages;
-
-    currentPage = page;
-  }
-
-  // Initialiseer stijlen op pagina-knoppen
-  pageBtns.forEach((btn) => setPageBtnStyle(btn, false));
-  showPage(1);
-
-  prevBtn?.addEventListener('click', () => { if (currentPage > 1) showPage(currentPage - 1); });
-  nextBtn?.addEventListener('click', () => { if (currentPage < totalPages) showPage(currentPage + 1); });
-  pageBtns.forEach((btn) => {
-    btn.addEventListener('click', () => showPage(parseInt(btn.dataset.page)));
-  });
-</script>
+  </script>
+)}

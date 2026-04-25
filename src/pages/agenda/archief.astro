@@ -1,0 +1,23 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getPageContent } from '../../content';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import AgendaHeroSection from '../../components/AgendaHeroSection.astro';
+import AgendaArchiveSection from '../../components/AgendaArchiveSection.astro';
+import PhotoMarquee from '../../components/PhotoMarquee.astro';
+
+const page = getPageContent('agenda');
+---
+
+<Base title={page.archiveMeta.title} description={page.archiveMeta.description}>
+  <Header />
+
+  <main id="main-content">
+    <AgendaHeroSection heading={page.archiveHeading} subhead={page.archiveSubhead} />
+    <AgendaArchiveSection />
+    <PhotoMarquee />
+  </main>
+
+  <Footer />
+</Base>
