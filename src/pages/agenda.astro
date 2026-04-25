@@ -1,12 +1,21 @@
 ---
 import Base from '../layouts/Base.astro';
 import { getPageContent } from '../content';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import AgendaHeroSection from '../components/AgendaHeroSection.astro';
+import AgendaEventsSection from '../components/AgendaEventsSection.astro';
 
 const page = getPageContent('agenda');
 ---
 
 <Base title={page.meta.title} description={page.meta.description}>
-  <main>
-    <p class="p-12 text-center">Agenda — components coming soon</p>
+  <Header />
+
+  <main id="main-content">
+    <AgendaHeroSection />
+    <AgendaEventsSection />
   </main>
+
+  <Footer />
 </Base>
