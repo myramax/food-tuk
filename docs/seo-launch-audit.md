@@ -11,6 +11,7 @@ De site heeft nu een solide SEO-basis voor lancering:
 - Astro sitemap generatie.
 - FAQ structured data op de homepage.
 - Launch-fix: LocalBusiness/FoodEstablishment structured data toegevoegd.
+- Launch-fix: Google Business Profile toegevoegd aan `sameAs`.
 - Launch-fix: 404 krijgt `noindex, follow`.
 - Launch-fix: agenda-archief krijgt `noindex, follow` en wordt uit de sitemap gehouden.
 
@@ -29,10 +30,10 @@ Goed:
 
 Aangepast:
 - Structured data is nu een `@graph` met `WebSite`, `FoodEstablishment`/`LocalBusiness` en `FAQPage`.
+- Google Business Profile staat in `sameAs`, naast Instagram, Facebook en TikTok.
 - OG image alt en theme color toegevoegd via de basislayout.
 
 Nog handmatig te controleren voor livegang:
-- Google Business Profile URL toevoegen als `sameAs` zodra die definitief bekend is.
 - Eventuele exacte vestigingsplaats/adres alleen toevoegen aan schema als die publiek en correct is.
 
 ### Agenda

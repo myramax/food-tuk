@@ -20,11 +20,11 @@ Deze punten moeten rond zijn voor livegang:
 
 Deze punten zijn goed om later te doen, maar blokkeren launch niet:
 
-- Google Business Profile URL toevoegen aan structured data `sameAs`.
 - Event JSON-LD toevoegen zodra Directus echte eventdata bevat.
 - Google Search Console property toevoegen.
 - Sitemap indienen in Search Console.
 - CMS definitief omzetten naar `https://cms.food-tuk.nl` als eerst een tijdelijke Directus URL wordt gebruikt.
+- Google Business Profile URL periodiek controleren als Google de bedrijfsvermelding of URL-structuur wijzigt.
 
 ## Laatste lokale checks
 

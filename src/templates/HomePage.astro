@@ -20,7 +20,7 @@ const homeSchema = buildHomeSchema({
   description: page.meta.description,
   email: common.email,
   phoneHref: common.phoneHref,
-  sameAs: common.footer.socials.map((item) => item.url),
+  sameAs: common.sameAs,
   logo: '/images/FoodTuk-logo.webp',
   image: page.meta.ogImage,
 }, page.faq.items);

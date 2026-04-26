@@ -3,6 +3,12 @@ export const common = {
   phoneDisplay: '06 48 18 58 48',
   phoneHref: 'tel:+31648185848',
   email: 'info@food-tuk.nl',
+  sameAs: [
+    'https://www.instagram.com/foodtukskewers/',
+    'https://www.facebook.com/foodtukskewers/?locale=nl_NL',
+    'https://www.tiktok.com/@foodtuknl',
+    'https://www.google.com/search?q=FoodTuk+Skewers&ludocid=12988870594353309657&ibp=gwp;0,7',
+  ],
   header: {
     nav: [
       { label: 'Wat wij doen', href: '/#wat-wij-doen', button: false },
